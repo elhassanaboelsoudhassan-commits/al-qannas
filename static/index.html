@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Qannas Landscape | القناص لاندسكيب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-color: #f8fafc;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(16, 185, 129, 0.5);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            background: rgba(16, 185, 129, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(16, 185, 129, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-area input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .dimensions-group {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            flex: 1;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -3px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-submit:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .results {
+            margin-top: 2rem;
+            display: none;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .results h3 {
+            margin-bottom: 1rem;
+            color: #34d399;
+        }
+
+        .download-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .download-btn {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .download-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .loader {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(16, 185, 129, 0.2);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .filename-display {
+            margin-top: 1rem;
+            color: #34d399;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>القناص لاندسكيب</h1>
+        <p class="subtitle">حول مخططات الحدائق إلى رسومات هندسية وثلاثية الأبعاد بضغطة زر</p>
+
+        <form id="uploadForm">
+            <div class="upload-area" id="dropZone">
+                <div class="upload-icon">📁</div>
+                <h3 style="margin-bottom: 0.5rem;">اسحب وأفلت الصورة هنا</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem;">أو اضغط لاختيار ملف (JPG, PNG)</p>
+                <div class="filename-display" id="filenameDisplay"></div>
+                <input type="file" id="imageInput" name="image" accept="image/*" required>
+            </div>
+
+            <div class="dimensions-group">
+                <div class="input-group">
+                    <label for="width">العرض (متر)</label>
+                    <input type="number" id="width" name="width" step="0.1" value="20.0" required>
+                </div>
+                <div class="input-group">
+                    <label for="length">الطول (متر)</label>
+                    <input type="number" id="length" name="length" step="0.1" value="30.0" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">توليد المخططات (DXF & OBJ)</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <div class="loader" id="loader"></div>
+        </div>
+
+        <div class="results" id="results">
+            <h3>تم التوليد بنجاح! ✨</h3>
+            <div class="download-links">
+                <a href="#" id="dxfLink" class="download-btn" download>
+                    <span>📐</span> تحميل AutoCAD (DXF)
+                </a>
+                <a href="#" id="objLink" class="download-btn" download>
+                    <span>🧊</span> تحميل 3D (OBJ)
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const imageInput = document.getElementById('imageInput');
+        const filenameDisplay = document.getElementById('filenameDisplay');
+        const dropZone = document.getElementById('dropZone');
+        const submitBtn = document.getElementById('submitBtn');
+        const loader = document.getElementById('loader');
+        const results = document.getElementById('results');
+        const dxfLink = document.getElementById('dxfLink');
+        const objLink = document.getElementById('objLink');
+
+        imageInput.addEventListener('change', (e) => {
+            if(e.target.files.length > 0) {
+                filenameDisplay.textContent = e.target.files[0].name;
+            } else {
+                filenameDisplay.textContent = '';
+            }
+        });
+
+        // Drag and drop effects
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if(e.dataTransfer.files.length > 0) {
+                imageInput.files = e.dataTransfer.files;
+                filenameDisplay.textContent = e.dataTransfer.files[0].name;
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if(!imageInput.files[0]) {
+                alert('يرجى اختيار صورة أولاً');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', imageInput.files[0]);
+            formData.append('width', document.getElementById('width').value);
+            formData.append('length', document.getElementById('length').value);
+
+            submitBtn.disabled = true;
+            loader.style.display = 'block';
+            results.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/process', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if(response.ok) {
+                    dxfLink.href = data.dxf_url;
+                    objLink.href = data.obj_url;
+                    results.style.display = 'block';
+                } else {
+                    alert('حدث خطأ أثناء المعالجة: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('حدث خطأ في الاتصال بالخادم');
+                console.error(error);
+            } finally {
+                submitBtn.disabled = false;
+                loader.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

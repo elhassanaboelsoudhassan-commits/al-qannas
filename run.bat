@@ -1,0 +1,6 @@
+@echo off
+echo Installing dependencies...
+python -m pip install -r requirements.txt
+echo Starting Al-Qannas Landscape Server...
+python -m uvicorn main:app --reload
+pause
