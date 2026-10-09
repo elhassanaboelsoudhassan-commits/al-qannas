@@ -16,8 +16,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-os.makedirs("uploads", exist_ok=True)
-os.makedirs("outputs", exist_ok=True)
+# Vercel Serverless Functions have a read-only filesystem except for /tmp
+UPLOAD_DIR = "/tmp/uploads" if os.getenv("VERCEL") else "uploads"
+OUTPUT_DIR = "/tmp/outputs" if os.getenv("VERCEL") else "outputs"
+
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs("static", exist_ok=True)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -34,14 +38,14 @@ async def process_landscape(
     length: float = Form(...)
 ):
     # Save uploaded image
-    image_path = f"uploads/{image.filename}"
+    image_path = os.path.join(UPLOAD_DIR, image.filename)
     with open(image_path, "wb") as buffer:
         shutil.copyfileobj(image.file, buffer)
     
     # Generate files
     base_name = os.path.splitext(image.filename)[0]
-    dxf_path = f"outputs/{base_name}_plan.dxf"
-    obj_path = f"outputs/{base_name}_3d.obj"
+    dxf_path = os.path.join(OUTPUT_DIR, f"{base_name}_plan.dxf")
+    obj_path = os.path.join(OUTPUT_DIR, f"{base_name}_3d.obj")
     
     create_dxf(dxf_path, width, length)
     create_obj(obj_path, width, length)
@@ -54,7 +58,7 @@ async def process_landscape(
 
 @app.get("/api/download/{filename}")
 async def download_file(filename: str):
-    file_path = f"outputs/{filename}"
+    file_path = os.path.join(OUTPUT_DIR, filename)
     if os.path.exists(file_path):
         return FileResponse(path=file_path, filename=filename)
     return {"error": "File not found"}
